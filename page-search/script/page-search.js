@@ -113,7 +113,7 @@ define((require, exports, module) => {
                     enableButtons();
                 } else {
                     let masterBranchId = '';
-                    if (branch.isMaster) {
+                    if (branch.isMaster()) {
                         masterBranchId = `/wid/${branch.getId()}`;
                     }
                     this.asArray().forEach((node) => {
