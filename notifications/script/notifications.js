@@ -3,7 +3,10 @@ define((require, exports, module) => {
 
     const NOTIFICATION_PROJECT = 'development';
     const { Ratchet } = window;
-    const headerSelector = '.context-header';
+    // Since the classes tend to change depending
+    // where in the system you are
+    // we have to rely on the ID
+    const headerSelector = '#gadget19';
 
     function getRepositoryForProject(projectName, fn) {
         Ratchet.observable('platform')
@@ -48,9 +51,10 @@ define((require, exports, module) => {
                         .then(function() {
                             const nodesArr = this.asArray();
                             if (nodesArr.length) {
-                                $(headerSelector).remove('#cms-notification');
                                 $(headerSelector)
-                                    .append(`<div id ="cms-notification" style='background-color: rgb(192, 57, 43); display: inline-block;color: white' >${nodesArr[0].cmsNotificationHTML}</div>`);
+                                    .remove('#cms-notification');
+                                $(headerSelector)
+                                    .after(`<div id ="cms-notification" style='background-color: rgb(192, 57, 43);color: white;text-align: center;width: 50%;margin: 0 auto;display: flex;justify-content: center;' >${nodesArr[0].cmsNotificationHTML}</div>`);
                             }
                         });
 
