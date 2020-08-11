@@ -12,7 +12,7 @@ define((require, exports, module) => {
     require('https://cache.cricketwireless.com/ckeditor-plugins/jquery.autocomplete.min.js');
     require('https://cache.cricketwireless.com/ckeditor-plugins/flesch-kincaid.js');
 
-    let basePluginPath = '../../..'; // necessary to offset from Cloud CMS plugin location
+    const basePluginPath = '../../..'; // necessary to offset from Cloud CMS plugin location
     const paragraphModalAssociationType = 'paragraph:has-modal';
 
     function getCurrentDocId() {
@@ -25,9 +25,9 @@ define((require, exports, module) => {
         return false;
     }
 
-    basePluginPath += uri.replace(window.location.origin, '');
-    CKEDITOR.plugins.addExternal('balloonpanel', `${basePluginPath}/plugins/balloonpanel/`);
-    CKEDITOR.plugins.addExternal('a11ychecker', `${basePluginPath}/plugins/a11ychecker/`);
+    // basePluginPath += uri.replace(window.location.origin, '');
+    // CKEDITOR.plugins.addExternal('balloonpanel', `${basePluginPath}/plugins/balloonpanel/`);
+    // CKEDITOR.plugins.addExternal('a11ychecker', `${basePluginPath}/plugins/a11ychecker/`);
 
     CKEDITOR.config.skin = 'kama';
     CKEDITOR.config.customConfig = '';
@@ -41,20 +41,59 @@ define((require, exports, module) => {
         }
     };
     CKEDITOR.config.toolbarGroups = [
-        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-        { name: 'tools', groups: ['tools'] },
-        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-        { name: 'forms', groups: ['forms'] },
-        { name: 'paragraph', groups: ['align', 'list', 'indent', 'blocks', 'bidi', 'paragraph'] },
-        { name: 'links', groups: ['links'] },
-        { name: 'insert', groups: ['insert'] },
-        { name: 'styles', groups: ['cricket_styles'] },
-        { name: 'colors', groups: ['colors'] },
-        { name: 'others', groups: ['others'] },
-        { name: 'about', groups: ['about'] },
-        { name: 'editing', groups: ['spellchecker', 'find', 'selection', 'editing'] },
+        {
+            name: 'clipboard',
+            groups: ['clipboard', 'undo']
+        },
+        {
+            name: 'tools',
+            groups: ['tools']
+        },
+        {
+            name: 'basicstyles',
+            groups: ['basicstyles', 'cleanup']
+        },
+        {
+            name: 'forms',
+            groups: ['forms']
+        },
+        {
+            name: 'paragraph',
+            groups: ['align', 'list', 'indent', 'blocks', 'bidi', 'paragraph']
+        },
+        {
+            name: 'links',
+            groups: ['links']
+        },
+        {
+            name: 'insert',
+            groups: ['insert']
+        },
+        {
+            name: 'styles',
+            groups: ['cricket_styles']
+        },
+        {
+            name: 'colors',
+            groups: ['colors']
+        },
+        {
+            name: 'others',
+            groups: ['others']
+        },
+        {
+            name: 'about',
+            groups: ['about']
+        },
+        {
+            name: 'editing',
+            groups: ['spellchecker', 'find', 'selection', 'editing']
+        },
         '/',
-        { name: 'document', groups: ['mode', 'document', 'doctools'] },
+        {
+            name: 'document',
+            groups: ['mode', 'document', 'doctools']
+        },
         { name: 'globalContent' },
         { name: 'legalContent' },
         { name: 'fleschKincaid' },
@@ -64,29 +103,117 @@ define((require, exports, module) => {
 
     CKEDITOR.stylesSet.add('cricket_styles', [
         // Block-level styles
-        { name: 'Paragraph Font-10px', element: 'p', attributes: { class: 'font-10' } },
-        { name: 'Paragraph Font-11px', element: 'p', attributes: { class: 'font-11' } },
-        { name: 'Paragraph Font-12px', element: 'p', attributes: { class: 'font-12' } },
-        { name: 'Paragraph Font-14px', element: 'p', attributes: { class: 'font-14' } },
-        { name: 'Paragraph Font-16px', element: 'p', attributes: { class: 'font-16' } },
-        { name: 'Paragraph Font-18px', element: 'p', attributes: { class: 'font-18' } },
-        { name: 'Paragraph Font-20px', element: 'p', attributes: { class: 'font-20' } },
-        { name: 'Paragraph Font-22px', element: 'p', attributes: { class: 'font-22' } },
-        { name: 'Paragraph Font-24px', element: 'p', attributes: { class: 'font-24' } },
-        { name: 'Paragraph Font-26px', element: 'p', attributes: { class: 'font-26' } },
-        { name: 'Paragraph Font-36px', element: 'p', attributes: { class: 'font-36' } },
-        { name: 'Paragraph Font-40px', element: 'p', attributes: { class: 'font-40' } },
+        {
+            name: 'Paragraph Font-10px',
+            element: 'p',
+            attributes: { class: 'font-10' }
+        },
+        {
+            name: 'Paragraph Font-11px',
+            element: 'p',
+            attributes: { class: 'font-11' }
+        },
+        {
+            name: 'Paragraph Font-12px',
+            element: 'p',
+            attributes: { class: 'font-12' }
+        },
+        {
+            name: 'Paragraph Font-14px',
+            element: 'p',
+            attributes: { class: 'font-14' }
+        },
+        {
+            name: 'Paragraph Font-16px',
+            element: 'p',
+            attributes: { class: 'font-16' }
+        },
+        {
+            name: 'Paragraph Font-18px',
+            element: 'p',
+            attributes: { class: 'font-18' }
+        },
+        {
+            name: 'Paragraph Font-20px',
+            element: 'p',
+            attributes: { class: 'font-20' }
+        },
+        {
+            name: 'Paragraph Font-22px',
+            element: 'p',
+            attributes: { class: 'font-22' }
+        },
+        {
+            name: 'Paragraph Font-24px',
+            element: 'p',
+            attributes: { class: 'font-24' }
+        },
+        {
+            name: 'Paragraph Font-26px',
+            element: 'p',
+            attributes: { class: 'font-26' }
+        },
+        {
+            name: 'Paragraph Font-36px',
+            element: 'p',
+            attributes: { class: 'font-36' }
+        },
+        {
+            name: 'Paragraph Font-40px',
+            element: 'p',
+            attributes: { class: 'font-40' }
+        },
         // Inline styles
-        { name: 'Cricket Green', element: 'span', attributes: { class: 'cricket-green-text' } },
-        { name: 'Dark Green', element: 'span', attributes: { class: 'dark-green-text' } },
-        { name: 'Light Green', element: 'span', attributes: { class: 'light-green-text' } },
-        { name: 'Dark Blue', element: 'span', attributes: { class: 'dark-blue-text' } },
-        { name: 'Light Blue', element: 'span', attributes: { class: 'light-blue-text' } },
-        { name: 'Dark Gray', element: 'span', attributes: { class: 'dark-gray-text' } },
-        { name: 'Light Gray', element: 'span', attributes: { class: 'light-gray-text' } },
-        { name: 'Black', element: 'span', attributes: { class: 'black-text' } },
-        { name: 'White', element: 'span', attributes: { class: 'white-text' } },
-        { name: 'Gold', element: 'span', attributes: { class: 'gold-text' } }
+        {
+            name: 'Cricket Green',
+            element: 'span',
+            attributes: { class: 'cricket-green-text' }
+        },
+        {
+            name: 'Dark Green',
+            element: 'span',
+            attributes: { class: 'dark-green-text' }
+        },
+        {
+            name: 'Light Green',
+            element: 'span',
+            attributes: { class: 'light-green-text' }
+        },
+        {
+            name: 'Dark Blue',
+            element: 'span',
+            attributes: { class: 'dark-blue-text' }
+        },
+        {
+            name: 'Light Blue',
+            element: 'span',
+            attributes: { class: 'light-blue-text' }
+        },
+        {
+            name: 'Dark Gray',
+            element: 'span',
+            attributes: { class: 'dark-gray-text' }
+        },
+        {
+            name: 'Light Gray',
+            element: 'span',
+            attributes: { class: 'light-gray-text' }
+        },
+        {
+            name: 'Black',
+            element: 'span',
+            attributes: { class: 'black-text' }
+        },
+        {
+            name: 'White',
+            element: 'span',
+            attributes: { class: 'white-text' }
+        },
+        {
+            name: 'Gold',
+            element: 'span',
+            attributes: { class: 'gold-text' }
+        }
     ]);
 
     CKEDITOR.config.stylesSet = 'cricket_styles';
@@ -204,7 +331,7 @@ define((require, exports, module) => {
         }
     });
 
-    CKEDITOR.config.extraPlugins = 'balloonpanel,a11ychecker,globalContent,dialog';
+    CKEDITOR.config.extraPlugins = 'globalContent,dialog';
 
     CKEDITOR.on('instanceCreated', (ev) => {
         const { editor } = ev;
@@ -213,7 +340,7 @@ define((require, exports, module) => {
         // customizations.
         editor.on('pluginsLoaded', () => {
             // If our custom dialog has not been registered, do that now.
-            if ($('#globalContent').length == 0) {
+            if ($('#globalContent').length === 0) {
                 $('body').append(modalHtml);
                 $('body').append(legalHtml);
 
@@ -271,7 +398,14 @@ define((require, exports, module) => {
             const newObject = [];
             $.each(result, function(data) {
                 // console.log(data);
-                const dataObj = { value: this.title, data: { ID: data, title: this.modalTitle, modalBody: this.modalBody } };
+                const dataObj = {
+                    value: this.title,
+                    data: {
+                        ID: data,
+                        title: this.modalTitle,
+                        modalBody: this.modalBody
+                    }
+                };
                 newObject.push(dataObj);
             });
 
@@ -329,7 +463,10 @@ define((require, exports, module) => {
                 $('#searchTermModalSlot').autocomplete({
                     lookup: modalSlotContent,
                     onSelect(suggestion) {
-                        previewContent = flattenSlotContentMarkupRecursively({ node: suggestion, nodeIsRoot: true });
+                        previewContent = flattenSlotContentMarkupRecursively({
+                            node: suggestion,
+                            nodeIsRoot: true
+                        });
                         $('#modalSlotResult')
                             .empty()
                             .html(
@@ -370,7 +507,10 @@ define((require, exports, module) => {
             let viewContent = '';
             options.node.view.forEach((viewItem) => {
                 depth += 1;
-                viewContent += flattenSlotContentMarkupRecursively({ node: viewItem, depth });
+                viewContent += flattenSlotContentMarkupRecursively({
+                    node: viewItem,
+                    depth
+                });
                 depth -= 1;
             });
             return viewContent;
