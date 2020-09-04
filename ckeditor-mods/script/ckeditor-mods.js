@@ -1,9 +1,9 @@
 define((require, exports, module) => {
     let modalContent;
-    const modalHtml =        '<div id="globalContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Modal</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="searchTerm">Modal Search (by title)</label> <input class="form-control input-lg" id="searchTerm" placeholder="Modal title" type="input" /></div><div id="result"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="insert">Insert</button></div></div></div></div>';
-    const modalSlotHtml =        '<div id="modalSlotContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Modal</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="searchTermModalSlot">Modal Search (by title)</label> <input class="form-control input-lg" id="searchTermModalSlot" placeholder="Modal title" type="input" /></div><div id="modalSlotResult"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="modalSlotInsert">Insert</button></div></div></div></div>';
-    const legalHtml =        '<div id="legalContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Legal Content</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="legalSearch">Legal Search (by topic)</label> <input class="form-control input-lg" id="legalSearch" placeholder="Legal topic" type="input" /></div><div id="legalResult"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="legalInsert">Insert</button></div></div></div></div>';
-    const modalCSS =        '.cke_maximized {z-index: 9996 !important;} .cke_button__globalcontent_icon, .cke_button__modalslot_icon, .cke_button__legalcontent_icon, .cke_button__fleschkincaid_icon { display: none !important; } .cke_button__globalcontent_label, .cke_button__legalcontent_label, .cke_button__fleschkincaid_label, .cke_button__modalslot_label { display: inline !important; padding: 0px; margin: 0px; } .modal.fade, .modal-scrollable { z-index: 9998 !important; } span#modalID { font-size: 11px; font-style: italic; } .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; z-index: 9999 !important; } .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; } .autocomplete-selected { background: #F0F0F0; } .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; } .autocomplete-group { padding: 2px 5px; } .autocomplete-group strong { display: block; border-bottom: 1px solid #000; } #slotDocId {display:none;}';
+    const modalHtml = '<div id="globalContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Modal</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="searchTerm">Modal Search (by title)</label> <input class="form-control input-lg" id="searchTerm" placeholder="Modal title" type="input" /></div><div id="result"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="insert">Insert</button></div></div></div></div>';
+    const modalSlotHtml = '<div id="modalSlotContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Modal</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="searchTermModalSlot">Modal Search (by title)</label> <input class="form-control input-lg" id="searchTermModalSlot" placeholder="Modal title" type="input" /></div><div id="modalSlotResult"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="modalSlotInsert">Insert</button></div></div></div></div>';
+    const legalHtml = '<div id="legalContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Legal Content</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="legalSearch">Legal Search (by topic)</label> <input class="form-control input-lg" id="legalSearch" placeholder="Legal topic" type="input" /></div><div id="legalResult"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="legalInsert">Insert</button></div></div></div></div>';
+    const modalCSS = '.cke_maximized {z-index: 9996 !important;} .cke_button__globalcontent_icon, .cke_button__modalslot_icon, .cke_button__legalcontent_icon, .cke_button__fleschkincaid_icon { display: none !important; } .cke_button__globalcontent_label, .cke_button__legalcontent_label, .cke_button__fleschkincaid_label, .cke_button__modalslot_label { display: inline !important; padding: 0px; margin: 0px; } .modal.fade, .modal-scrollable { z-index: 9998 !important; } span#modalID { font-size: 11px; font-style: italic; } .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; z-index: 9999 !important; } .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; } .autocomplete-selected { background: #F0F0F0; } .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; } .autocomplete-group { padding: 2px 5px; } .autocomplete-group strong { display: block; border-bottom: 1px solid #000; } #slotDocId {display:none;}';
     const $ = require('jquery');
     let { uri } = module;
     const OneTeam = window._OT;
@@ -235,7 +235,7 @@ define((require, exports, module) => {
             editor.addCommand(fleschKincaid, {
                 exec(editor) {
                     const str = editor.getData();
-                    // console.log(str);
+                    console.log(str);
                     editor.showNotification(`Flesch Kincaid grade level is: ${TextStatistics.prototype.fleschKincaidGradeLevel(str)}`);
                     // console.log(TextStatistics.prototype.fleschKincaidGradeLevel(str));
                 },
@@ -306,7 +306,7 @@ define((require, exports, module) => {
             });
 
             editor.ui.addButton('fleschKincaid', {
-                label: 'Flesch Kincaid Score',
+                label: 'Save Score',
                 command: fleschKincaid,
                 toolbar: 'fleschKincaid,1'
             });
@@ -335,6 +335,22 @@ define((require, exports, module) => {
 
     CKEDITOR.on('instanceCreated', (ev) => {
         const { editor } = ev;
+        const editorId = editor.id;
+
+        // get initial score
+        let currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
+
+        // append score indicator when editor finished initializing
+        editor.on('instanceReady', function() {
+            $(`#${editorId}_bottom`).append(`<p style="display: inline-block;
+                                                float: right;
+                                                padding: 6px 6px 0;
+                                                color: #60676a;
+                                                cursor: default;
+                                                text-decoration: none;
+                                                outline: 0;
+                                                border: 0;">Current Flesch Kincaid score: <span id="${editorId}_curScore">${currentScore}</span></p>`);
+        });
         // Listen for the "pluginsLoaded" event, so we are sure that the
         // "dialog" plugin has been loaded and we are able to do our
         // customizations.
@@ -354,6 +370,38 @@ define((require, exports, module) => {
                 initModalSlotAutoComplete();
             }
         });
+
+        // get current document information
+        const document = Ratchet.observable('document');
+        document.subscribe(editorId, () => {
+            const node = document.get();
+
+            let propertyName = '';
+
+            // compare current editor text to the document text to determine which property this editor is on
+            for (const [key, value] of Object.entries(node)) {
+                if (editor.getData() === value) {
+                    propertyName = `${key}_score`;
+                }
+            }
+
+            node._score[propertyName] = currentScore;
+
+            if (currentScore) {
+                node.update().then(() => {
+                    document.unsubscribe(editorId);
+                });
+            }
+        });
+
+        editor.on('change', () => {
+            const str = editor.getData();
+            currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
+
+            // updating current score on the indicator
+            $(`#${editorId}_curScore`).html(currentScore);
+        });
+
     });
 
     function initAutoComplete() {
@@ -396,7 +444,7 @@ define((require, exports, module) => {
         // EVENTUALLY NEED TO SEARCH ONDEMAND, WILL NEED TO MODIFY THE MIDDLEWARE
         $.get(`${domain}/cloudassets/cms/modal/content`, (result) => {
             const newObject = [];
-            $.each(result, function(data) {
+            $.each(result, function (data) {
                 // console.log(data);
                 const dataObj = {
                     value: this.title,
@@ -416,7 +464,7 @@ define((require, exports, module) => {
         // LOAD LEGAL CONTENT
         $.get(`${domain}/cloudassets/cms/legal/content`, (result) => {
             const newObject = [];
-            $.each(result, function(data) {
+            $.each(result, function (data) {
                 const dataObj = {
                     value: this.topic,
                     data: {
@@ -470,10 +518,10 @@ define((require, exports, module) => {
                         $('#modalSlotResult')
                             .empty()
                             .html(
-                                `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" ` +
-                                    `data-slot-id="${suggestion.slotId}" ` +
-                                    `data-slot-doc-id="${suggestion.slotDocId}" ` +
-                                    `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
+                                `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" `
+                                + `data-slot-id="${suggestion.slotId}" `
+                                + `data-slot-doc-id="${suggestion.slotDocId}" `
+                                + `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
                             );
                     }
                 });
