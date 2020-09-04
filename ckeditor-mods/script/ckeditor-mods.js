@@ -96,7 +96,7 @@ define((require, exports, module) => {
         },
         { name: 'globalContent' },
         { name: 'legalContent' },
-        { name: 'fleschKincaid' },
+        // { name: 'fleschKincaid' },
         { name: 'modalSlot' }
         // {name: 'FilePicker', groups:["cloudcms-link", "cloudcms-image"]}
     ];
@@ -229,18 +229,18 @@ define((require, exports, module) => {
         init(editor) {
             const modalContent = 'modalContent';
             const legalContent = 'legalContent';
-            const fleschKincaid = 'fleschKincaid';
+            // const fleschKincaid = 'fleschKincaid';
             const modalSlot = 'modalSlot';
 
-            editor.addCommand(fleschKincaid, {
-                exec(editor) {
-                    const str = editor.getData();
-                    console.log(str);
-                    editor.showNotification(`Flesch Kincaid grade level is: ${TextStatistics.prototype.fleschKincaidGradeLevel(str)}`);
-                    // console.log(TextStatistics.prototype.fleschKincaidGradeLevel(str));
-                },
-                canUndo: true
-            });
+            // editor.addCommand(fleschKincaid, {
+            //     exec(editor) {
+            //         const str = editor.getData();
+            //         // console.log(str);
+            //         editor.showNotification(`Flesch Kincaid grade level is: ${TextStatistics.prototype.fleschKincaidGradeLevel(str)}`);
+            //         // console.log(TextStatistics.prototype.fleschKincaidGradeLevel(str));
+            //     },
+            //     canUndo: true
+            // });
 
             editor.addCommand(modalContent, {
                 exec(editor) {
@@ -305,11 +305,11 @@ define((require, exports, module) => {
                 canUndo: true
             });
 
-            editor.ui.addButton('fleschKincaid', {
-                label: 'Save Score',
-                command: fleschKincaid,
-                toolbar: 'fleschKincaid,1'
-            });
+            // editor.ui.addButton('fleschKincaid', {
+            //     label: 'Save Score',
+            //     command: fleschKincaid,
+            //     toolbar: 'fleschKincaid,1'
+            // });
 
             editor.ui.addButton('globalContent', {
                 label: 'Modal',
