@@ -96,7 +96,6 @@ define((require, exports, module) => {
         },
         { name: 'globalContent' },
         { name: 'legalContent' },
-        // { name: 'fleschKincaid' },
         { name: 'modalSlot' }
         // {name: 'FilePicker', groups:["cloudcms-link", "cloudcms-image"]}
     ];
@@ -229,18 +228,7 @@ define((require, exports, module) => {
         init(editor) {
             const modalContent = 'modalContent';
             const legalContent = 'legalContent';
-            // const fleschKincaid = 'fleschKincaid';
             const modalSlot = 'modalSlot';
-
-            // editor.addCommand(fleschKincaid, {
-            //     exec(editor) {
-            //         const str = editor.getData();
-            //         // console.log(str);
-            //         editor.showNotification(`Flesch Kincaid grade level is: ${TextStatistics.prototype.fleschKincaidGradeLevel(str)}`);
-            //         // console.log(TextStatistics.prototype.fleschKincaidGradeLevel(str));
-            //     },
-            //     canUndo: true
-            // });
 
             editor.addCommand(modalContent, {
                 exec(editor) {
@@ -305,12 +293,6 @@ define((require, exports, module) => {
                 canUndo: true
             });
 
-            // editor.ui.addButton('fleschKincaid', {
-            //     label: 'Save Score',
-            //     command: fleschKincaid,
-            //     toolbar: 'fleschKincaid,1'
-            // });
-
             editor.ui.addButton('globalContent', {
                 label: 'Modal',
                 command: modalContent,
@@ -336,21 +318,25 @@ define((require, exports, module) => {
     CKEDITOR.on('instanceCreated', (ev) => {
         const { editor } = ev;
         const editorId = editor.id;
+        let currentScore = 0.0;
 
         // get initial score
-        let currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
+        if (editor.getData()) {
+            currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
+        }
 
         // append score indicator when editor finished initializing
         editor.on('instanceReady', function() {
             $(`#${editorId}_bottom`).append(`<p style="display: inline-block;
-                                                float: right;
-                                                padding: 6px 6px 0;
-                                                color: #60676a;
-                                                cursor: default;
-                                                text-decoration: none;
-                                                outline: 0;
-                                                border: 0;">Current Flesch Kincaid score: <span id="${editorId}_curScore">${currentScore}</span></p>`);
+                                                    float: right;
+                                                    padding: 6px 6px 0;
+                                                    color: #60676a;
+                                                    cursor: default;
+                                                    text-decoration: none;
+                                                    outline: 0;
+                                                    border: 0;">Current Flesch Kincaid score: <span id="${editorId}_curScore">${currentScore}</span></p>`);
         });
+
         // Listen for the "pluginsLoaded" event, so we are sure that the
         // "dialog" plugin has been loaded and we are able to do our
         // customizations.
@@ -373,19 +359,22 @@ define((require, exports, module) => {
 
         // get current document information
         const document = Ratchet.observable('document');
+
         document.subscribe(editorId, () => {
+
             const node = document.get();
 
-            let propertyName = '';
+            if (!node.hasOwnProperty('_score')) {
+                node._score = {};
+            }
 
             // compare current editor text to the document text to determine which property this editor is on
             for (const [key, value] of Object.entries(node)) {
                 if (editor.getData() === value) {
-                    propertyName = `${key}_score`;
+                    const propertyName = `${key}_score`;
+                    node._score[propertyName] = currentScore;
                 }
             }
-
-            node._score[propertyName] = currentScore;
 
             if (currentScore) {
                 node.update().then(() => {
@@ -398,10 +387,12 @@ define((require, exports, module) => {
             const str = editor.getData();
             if (str) {
                 currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
-
-                // updating current score on the indicator
-                $(`#${editorId}_curScore`).html(currentScore);
+            } else {
+                currentScore = 0.0;
             }
+
+            // updating current score on the indicator
+            $(`#${editorId}_curScore`).html(currentScore);
         });
 
     });
