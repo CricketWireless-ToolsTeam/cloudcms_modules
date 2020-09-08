@@ -396,10 +396,12 @@ define((require, exports, module) => {
 
         editor.on('change', () => {
             const str = editor.getData();
-            currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
+            if (str) {
+                currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
 
-            // updating current score on the indicator
-            $(`#${editorId}_curScore`).html(currentScore);
+                // updating current score on the indicator
+                $(`#${editorId}_curScore`).html(currentScore);
+            }
         });
 
     });
