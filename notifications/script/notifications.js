@@ -12,7 +12,7 @@ define((require, exports, module) => {
         Ratchet.observable('platform')
             .get()
             .listRepositories()
-            .then(function() {
+            .then(function () {
                 const listOfRepos = this.asArray();
 
                 const desiredRepo = listOfRepos.find((repo) => {
@@ -48,7 +48,7 @@ define((require, exports, module) => {
                     }, {
                         limit: 1
                     })
-                        .then(function() {
+                        .then(function () {
                             const nodesArr = this.asArray();
                             if (nodesArr.length) {
                                 $(headerSelector)
