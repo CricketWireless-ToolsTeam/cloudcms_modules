@@ -348,12 +348,7 @@ define((require, exports, module) => {
         if (editor.getData()) {
             currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
         }
-        // get current document information
-        const document = Ratchet.observable('document');
 
-        const node = document.get();
-
-        node._score = node._score || {};
 
         // append score indicator when editor finished initializing
         editor.on('instanceReady', () => {
@@ -395,6 +390,14 @@ define((require, exports, module) => {
 
 
         editor.on('change', () => {
+
+            // get current document information
+            const document = Ratchet.observable('document');
+
+            const node = document.get();
+
+            node._score = node._score || {};
+
             const str = editor.getData();
             if (str) {
                 currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
