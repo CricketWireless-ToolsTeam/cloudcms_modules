@@ -353,18 +353,7 @@ define((require, exports, module) => {
 
         const node = document.get();
 
-        if (!node.hasOwnProperty('_score')) {
-            node._score = {};
-        }
-
-
-        // compare current editor text to the document text to determine which property this editor is on
-        for (const [key, value] of Object.entries(node)) {
-            if (editor.getData() === value) {
-                const propertyName = `${key}_score`;
-                node._score[propertyName] = currentScore;
-            }
-        }
+        node._score = node._score || {};
 
         // append score indicator when editor finished initializing
         editor.on('instanceReady', () => {
@@ -414,7 +403,7 @@ define((require, exports, module) => {
             }
 
             // compare current editor text to the document text to determine which property this editor is on
-            for (const [key, value] of Object.entries(node)) {
+            for (const [key, value] of Object.entries(node.json())) {
                 if (editor.getData() === value) {
                     const propertyName = `${key}_score`;
                     node._score[propertyName] = currentScore;
@@ -422,8 +411,7 @@ define((require, exports, module) => {
             }
 
             // updating current score on the indicator
-            $(`#${editorId}_curScore`)
-                .html(currentScore);
+            $(`#${editorId}_curScore`).html(currentScore);
         });
 
     });
