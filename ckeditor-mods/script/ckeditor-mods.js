@@ -406,7 +406,7 @@ define((require, exports, module) => {
             }
 
             // compare current editor text to the document text to determine which property this editor is on
-            for (const [key, value] of Object.entries(node.json())) {
+            for (const [key, value] of Object.entries(node)) {
                 if (editor.getData() === value) {
                     const propertyName = `${key}_score`;
                     node._score[propertyName] = currentScore;
