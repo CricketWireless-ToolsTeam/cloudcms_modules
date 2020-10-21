@@ -232,87 +232,63 @@ define((require, exports, module) => {
 
             editor.addCommand(modalContent, {
                 exec(editor) {
-                    $('#insert')
-                        .unbind('click');
-                    $('#globalContent')
-                        .modal('show');
-                    $('#insert')
-                        .on('click', (event) => {
-                            event.preventDefault();
-                            const modalTitle = $('#result h4#modalTitle')
-                                .text();
-                            const modalID = $('#result span#modalID')
-                                .text();
-                            editor.insertHtml(`<a href="modalAction/${modalID}" title="" pop-modal modalid="${modalID}" class="custom-class" data-toggle="modal" data-target="#${modalID}">${modalTitle}</a>`);
-                            $('#globalContent')
-                                .modal('hide');
-                            $('#globalContent #result')
-                                .empty();
-                            $('#searchTerm')
-                                .val('');
-                        });
+                    $('#insert').unbind('click');
+                    $('#globalContent').modal('show');
+                    $('#insert').on('click', (event) => {
+                        event.preventDefault();
+                        const modalTitle = $('#result h4#modalTitle').text();
+                        const modalID = $('#result span#modalID').text();
+                        editor.insertHtml(`<a href="modalAction/${modalID}" title="" pop-modal modalid="${modalID}" class="custom-class" data-toggle="modal" data-target="#${modalID}">${modalTitle}</a>`);
+                        $('#globalContent').modal('hide');
+                        $('#globalContent #result').empty();
+                        $('#searchTerm').val('');
+                    });
                 },
                 canUndo: true
             });
 
             editor.addCommand(legalContent, {
                 exec(editor) {
-                    $('#legalInsert')
-                        .unbind('click');
-                    $('#legalContent')
-                        .modal('show');
-                    $('#legalInsert')
-                        .on('click', (event) => {
-                            event.preventDefault();
-                            const legalID = $('#legalResult span#legalID')
-                                .text();
-                            const descriptionType = $('#legalResult #descriptionType')
-                                .val();
-                            if (descriptionType.length > 0 && descriptionType) {
-                                editor.insertText(`~#[content]-[legal]-[content]-[${legalID}]-[${descriptionType}]#~`);
-                            } else {
-                                $('#legalResult #descriptionTypeLabel')
-                                    .addClass('text-danger');
-                                return false;
-                            }
-                            $('#legalContent')
-                                .modal('hide');
-                            $('#legalContent #legalResult')
-                                .empty();
-                            $('#legalSearch')
-                                .val('');
-                        });
+                    $('#legalInsert').unbind('click');
+                    $('#legalContent').modal('show');
+                    $('#legalInsert').on('click', (event) => {
+                        event.preventDefault();
+                        const legalID = $('#legalResult span#legalID').text();
+                        const descriptionType = $('#legalResult #descriptionType').val();
+                        if (descriptionType.length > 0 && descriptionType) {
+                            editor.insertText(`~#[content]-[legal]-[content]-[${legalID}]-[${descriptionType}]#~`);
+                        } else {
+                            $('#legalResult #descriptionTypeLabel').addClass('text-danger');
+                            return false;
+                        }
+                        $('#legalContent').modal('hide');
+                        $('#legalContent #legalResult').empty();
+                        $('#legalSearch').val('');
+                    });
                 },
                 canUndo: true
             });
 
             editor.addCommand(modalSlot, {
                 exec(editor) {
-                    $('#modalSlotInsert')
-                        .off();
-                    $('#modalSlotContent')
-                        .modal('show');
-                    $('#modalSlotInsert')
-                        .on('click', () => {
-                            const modalTitle = $('#modalTitle')
-                                .text();
-                            const modalBody = document.querySelector('#modalBody');
-                            const { slotId } = modalBody.dataset;
-                            const { slotDocId } = modalBody.dataset;
-                            const ref = modalBody.dataset.slotRef;
-                            const uuid = OneTeam.parseNodeIdFromRef(ref);
+                    $('#modalSlotInsert').off();
+                    $('#modalSlotContent').modal('show');
+                    $('#modalSlotInsert').on('click', () => {
+                        const modalTitle = $('#modalTitle').text();
+                        const modalBody = document.querySelector('#modalBody');
+                        const { slotId } = modalBody.dataset;
+                        const { slotDocId } = modalBody.dataset;
+                        const ref = modalBody.dataset.slotRef;
+                        const uuid = OneTeam.parseNodeIdFromRef(ref);
 
-                            const currentDocId = getCurrentDocId();
-                            editor.insertHtml(
-                                `<a href="modalAction/${slotId}" title="" pop-modal slotid="${slotId}" ` + `data-link-id="${uuid}" data-link-ref="${ref}" ` + `class="custom-class" data-toggle="modal" data-target="#${slotId}"> ${modalTitle}</a>`
-                            );
-                            $('#modalSlotContent')
-                                .modal('hide');
-                            $('#modalSlotContent #modalSlotResult')
-                                .empty();
-                            $('#searchTermModalSlot')
-                                .val('');
-                        });
+                        const currentDocId = getCurrentDocId();
+                        editor.insertHtml(
+                            `<a href="modalAction/${slotId}" title="" pop-modal slotid="${slotId}" ` + `data-link-id="${uuid}" data-link-ref="${ref}" ` + `class="custom-class" data-toggle="modal" data-target="#${slotId}"> ${modalTitle}</a>`
+                        );
+                        $('#modalSlotContent').modal('hide');
+                        $('#modalSlotContent #modalSlotResult').empty();
+                        $('#searchTermModalSlot').val('');
+                    });
                 },
                 canUndo: true
             });
@@ -349,11 +325,9 @@ define((require, exports, module) => {
             currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
         }
 
-
         // append score indicator when editor finished initializing
         editor.on('instanceReady', () => {
-            $(`#${editorId}_bottom`)
-                .append(`<p style="display: inline-block;
+            $(`#${editorId}_bottom`).append(`<p style="display: inline-block;
                                                     float: right;
                                                     padding: 6px 6px 0;
                                                     color: #60676a;
@@ -369,40 +343,29 @@ define((require, exports, module) => {
         editor.on('pluginsLoaded', () => {
             // If our custom dialog has not been registered, do that now.
             if ($('#globalContent').length === 0) {
-                $('body')
-                    .append(modalHtml);
-                $('body')
-                    .append(legalHtml);
+                $('body').append(modalHtml);
+                $('body').append(legalHtml);
 
-                $(`<style>${modalCSS}</style>`)
-                    .appendTo('#globalContent');
-                $('select.workspace-picker')
-                    .on('change', initAutoComplete);
+                $(`<style>${modalCSS}</style>`).appendTo('#globalContent');
+                $('select.workspace-picker').on('change', initAutoComplete);
                 initAutoComplete();
             }
 
             if ($('#modalSlotContent').length === 0) {
-                $('body')
-                    .append(modalSlotHtml);
+                $('body').append(modalSlotHtml);
                 initModalSlotAutoComplete();
             }
         });
 
+        // get current document information
+        const document = Ratchet.observable('document');
 
-        editor.on('change', () => {
-
-            // get current document information
-            const document = Ratchet.observable('document');
+        document.subscribe(editorId, () => {
 
             const node = document.get();
 
-            node._score = node._score || {};
-
-            const str = editor.getData();
-            if (str) {
-                currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
-            } else {
-                currentScore = 0.0;
+            if (!node.hasOwnProperty('_score')) {
+                node._score = {};
             }
 
             // compare current editor text to the document text to determine which property this editor is on
@@ -413,6 +376,21 @@ define((require, exports, module) => {
                 }
             }
 
+            if (currentScore) {
+                node.update().then(() => {
+                    document.unsubscribe(editorId);
+                });
+            }
+        });
+
+        editor.on('change', () => {
+            const str = editor.getData();
+            if (str) {
+                currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
+            } else {
+                currentScore = 0.0;
+            }
+
             // updating current score on the indicator
             $(`#${editorId}_curScore`).html(currentScore);
         });
@@ -421,8 +399,7 @@ define((require, exports, module) => {
 
     function initAutoComplete() {
         // Check workspace-picker to determine the appropriate env for creating the preview link.
-        const workspacePickerVal = $('select.workspace-picker option:selected')
-            .text();
+        const workspacePickerVal = $('select.workspace-picker option:selected').text();
         let domain;
         // Decide on the correct environment
         if (workspacePickerVal.includes('Master')) {
@@ -503,8 +480,7 @@ define((require, exports, module) => {
         let previewContent;
         let modalSlotSuggestion;
         // fetch all cricket:slot with slotIsModal of "y", active, w a slotId and at least 1 slotContent item
-        const branch = Ratchet.observable('branch')
-            .get();
+        const branch = Ratchet.observable('branch').get();
         Chain(branch)
             .trap(genericErrorLoggerHalter)
             .queryNodes({
@@ -525,24 +501,23 @@ define((require, exports, module) => {
                 modalSlotContent.push(modalSlotSuggestion);
             })
             .then(() => {
-                $('#searchTermModalSlot')
-                    .autocomplete({
-                        lookup: modalSlotContent,
-                        onSelect(suggestion) {
-                            previewContent = flattenSlotContentMarkupRecursively({
-                                node: suggestion,
-                                nodeIsRoot: true
-                            });
-                            $('#modalSlotResult')
-                                .empty()
-                                .html(
-                                    `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" `
-                                    + `data-slot-id="${suggestion.slotId}" `
-                                    + `data-slot-doc-id="${suggestion.slotDocId}" `
-                                    + `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
-                                );
-                        }
-                    });
+                $('#searchTermModalSlot').autocomplete({
+                    lookup: modalSlotContent,
+                    onSelect(suggestion) {
+                        previewContent = flattenSlotContentMarkupRecursively({
+                            node: suggestion,
+                            nodeIsRoot: true
+                        });
+                        $('#modalSlotResult')
+                            .empty()
+                            .html(
+                                `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" `
+                                + `data-slot-id="${suggestion.slotId}" `
+                                + `data-slot-doc-id="${suggestion.slotDocId}" `
+                                + `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
+                            );
+                    }
+                });
             });
     }
 
@@ -593,42 +568,40 @@ define((require, exports, module) => {
     }
 
     function searchInit() {
-        $('#searchTerm')
-            .autocomplete({
-                lookup: modalContent,
-                onSelect(suggestion) {
-                    $('#result')
-                        .empty()
-                        .html(`<h4 id="modalTitle">${suggestion.value}</h4><p id="modalBody">${suggestion.data.modalBody}</p><p><span id="modalID">${suggestion.data.ID}</span></p>`);
-                }
-            });
+        $('#searchTerm').autocomplete({
+            lookup: modalContent,
+            onSelect(suggestion) {
+                $('#result')
+                    .empty()
+                    .html(`<h4 id="modalTitle">${suggestion.value}</h4><p id="modalBody">${suggestion.data.modalBody}</p><p><span id="modalID">${suggestion.data.ID}</span></p>`);
+            }
+        });
     }
 
     function legalInit() {
-        $('#legalSearch')
-            .autocomplete({
-                lookup: legalContent,
-                onSelect(suggestion) {
-                    if (suggestion.data.longDisclaimer && suggestion.data.shortDisclaimer) {
-                        $('#legalResult')
-                            .empty()
-                            .html(
-                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="">Insert Short or Long Description</option><option value="shortDisclaimer">Short</option><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                            );
-                    } else if (suggestion.data.longDisclaimer) {
-                        $('#legalResult')
-                            .empty()
-                            .html(
-                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                            );
-                    } else {
-                        $('#legalResult')
-                            .empty()
-                            .html(
-                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="shortDisclaimer">Short</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                            );
-                    }
+        $('#legalSearch').autocomplete({
+            lookup: legalContent,
+            onSelect(suggestion) {
+                if (suggestion.data.longDisclaimer && suggestion.data.shortDisclaimer) {
+                    $('#legalResult')
+                        .empty()
+                        .html(
+                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="">Insert Short or Long Description</option><option value="shortDisclaimer">Short</option><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                        );
+                } else if (suggestion.data.longDisclaimer) {
+                    $('#legalResult')
+                        .empty()
+                        .html(
+                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                        );
+                } else {
+                    $('#legalResult')
+                        .empty()
+                        .html(
+                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="shortDisclaimer">Short</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                        );
                 }
-            });
+            }
+        });
     }
 });
