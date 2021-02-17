@@ -10,8 +10,8 @@ define((require, exports, module) => {
     const errorColor = '#a94442';
     const validColor = 'rgb(39, 174, 96)';
     const saveButtonSelector = '.buttonbar .btn.save, .btn-toolbar .btn.save, .btn.btn-success.wizard-next';
-    const propertyFieldSelector = '.alpaca-field [data-alpaca-field-name=urlList], .alpaca-field [data-alpaca-field-name=errorCode]';
-    const propertyTextSelector = '.alpaca-field [name=urlList_0_url], .alpaca-field [name=errorCode]';
+    const propertyFieldSelector = '.alpaca-field [data-alpaca-field-name=urlList], .alpaca-field [data-alpaca-field-name=errorCode], .alpaca-field [data-alpaca-field-name=skuId]';
+    const propertyTextSelector = '.alpaca-field [name=urlList_0_url], .alpaca-field [name=errorCode], .alpaca-field [name=skuId]';
     const helpBlockSelector = '.help-block';
     const validPropertyClass = 'valid-property-message';
     const validPropertySelector = `.${validPropertyClass}`;
@@ -30,7 +30,8 @@ define((require, exports, module) => {
 
     const propertiesList = [
         { regex: 'cricket:page(-.*)?', property: 'urlList.0.url' },
-        { regex: 'cricket:error', property: 'errorCode' }
+        { regex: 'cricket:error', property: 'errorCode' },
+        { regex: 'cricket:sku', property: 'skuId' }
     ];
 
     function enableSave() {
@@ -88,9 +89,15 @@ define((require, exports, module) => {
         // preemptively remove to prevent occasional double insertion
         clearMessages();
         // add message text
-        $(propertyFieldSelector)
-            .find(helpBlockSelector)
+        var ele =  $(propertyFieldSelector)
+            .find(helpBlockSelector);
+            if(ele.length){
+                 ele
             .after(`<p class='${duplicatePropertyClass}' style='color: ${errorColor};'>${duplicatePropertyString}</p>`);
+            }else {
+                 $(propertyFieldSelector).append(`<p class='${duplicatePropertyClass}' style='color: ${errorColor};'>${duplicatePropertyString}</p>`);
+            }
+       
     }
 
     function setPropertyValid() {
@@ -99,9 +106,14 @@ define((require, exports, module) => {
         // remove message text
         clearMessages();
         // add message text
-        $(propertyFieldSelector)
-            .find(helpBlockSelector)
-            .after(`<p class='${validPropertyClass}' style='color: ${validColor};'>${validPropertyString}</p>`);
+        var ele =  $(propertyFieldSelector)
+            .find(helpBlockSelector);
+            if(ele.length) {
+                 ele.after(`<p class='${validPropertyClass}' style='color: ${validColor};'>${validPropertyString}</p>`);
+            }else {
+                $(propertyFieldSelector).append(`<p class='${validPropertyClass}' style='color: ${validColor};'>${validPropertyString}</p>`);
+            }
+       
     }
 
     function genericErrorLoggerHalter(err) {

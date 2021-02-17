@@ -24,7 +24,9 @@ define((require, exports, module) => {
             $regex: 'cricket:page(-.+)?'
         },
         [PRODUCT]: 'cricket:product',
-        [SKU]: 'cricket:sku',
+        [SKU]: {
+            $regex: 'cricket:sku'
+        },
         [PRICESHEET]: 'cricket:price-list',
         [MISSINGMETAKEYS]: {
             $regex: 'cricket:page(-.+)?'
