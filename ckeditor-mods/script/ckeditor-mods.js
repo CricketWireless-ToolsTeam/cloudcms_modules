@@ -289,11 +289,9 @@ define((require, exports, module) => {
                                 .text();
                             const modalBody = document.querySelector('#modalBody');
                             const { slotId } = modalBody.dataset;
-                            const { slotDocId } = modalBody.dataset;
                             const ref = modalBody.dataset.slotRef;
                             const uuid = OneTeam.parseNodeIdFromRef(ref);
 
-                            const currentDocId = getCurrentDocId();
                             editor.insertHtml(
                                 `<a href="modalAction/${slotId}" title="" pop-modal slotid="${slotId}" ` + `data-link-id="${uuid}" data-link-ref="${ref}" ` + `class="custom-class" data-toggle="modal" data-target="#${slotId}"> ${modalTitle}</a>`
                             );
@@ -308,10 +306,10 @@ define((require, exports, module) => {
                 canUndo: true
             });
 
-            editor.ui.addButton('globalContent', {
+            editor.ui.addButton('modalContent', {
                 label: 'Modal',
                 command: modalContent,
-                toolbar: 'globalContent,1'
+                toolbar: 'modalContent,1'
             });
 
             editor.ui.addButton('legalContent', {
