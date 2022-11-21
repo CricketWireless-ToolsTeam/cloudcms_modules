@@ -5,15 +5,11 @@ define((require, exports, module) => {
     const legalHtml = '<div id="legalContent" class="fade modal" role="dialog" tabindex="-1"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"> <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title" >Insert Legal Content</h4></div><div class="modal-body"><p><form><div class="form-group"> <label for="legalSearch">Legal Search (by topic)</label> <input class="form-control input-lg" id="legalSearch" placeholder="Legal topic" type="input" /></div><div id="legalResult"></div></form></p></div><div class="modal-footer"> <button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <button class="btn btn-primary" type="button" id="legalInsert">Insert</button></div></div></div></div>';
     const modalCSS = '.cke_maximized {z-index: 9996 !important;} .cke_button__globalcontent_icon, .cke_button__modalslot_icon, .cke_button__legalcontent_icon, .cke_button__fleschkincaid_icon { display: none !important; } .cke_button__globalcontent_label, .cke_button__legalcontent_label, .cke_button__fleschkincaid_label, .cke_button__modalslot_label { display: inline !important; padding: 0px; margin: 0px; } .modal.fade, .modal-scrollable { z-index: 9998 !important; } span#modalID { font-size: 11px; font-style: italic; } .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; z-index: 9999 !important; } .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; } .autocomplete-selected { background: #F0F0F0; } .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; } .autocomplete-group { padding: 2px 5px; } .autocomplete-group strong { display: block; border-bottom: 1px solid #000; } #slotDocId {display:none;}';
     const $ = require('jquery');
-    let { uri } = module;
     const OneTeam = window._OT;
-    uri = uri.substring(0, uri.lastIndexOf('/'));
 
     require('https://cache.cricketwireless.com/ckeditor-plugins/jquery.autocomplete.min.js');
     require('https://cache.cricketwireless.com/ckeditor-plugins/flesch-kincaid.js');
 
-    const basePluginPath = '../../..'; // necessary to offset from Cloud CMS plugin location
-    const paragraphModalAssociationType = 'paragraph:has-modal';
 
     function getCurrentDocId() {
         // get reference to current document (paragraph/whatever, after documents/, before any subsequent slash)
@@ -24,10 +20,6 @@ define((require, exports, module) => {
         console.error(err);
         return false;
     }
-
-    // basePluginPath += uri.replace(window.location.origin, '');
-    // CKEDITOR.plugins.addExternal('balloonpanel', `${basePluginPath}/plugins/balloonpanel/`);
-    // CKEDITOR.plugins.addExternal('a11ychecker', `${basePluginPath}/plugins/a11ychecker/`);
 
     CKEDITOR.config.skin = 'kama';
     CKEDITOR.config.customConfig = '';
@@ -217,7 +209,6 @@ define((require, exports, module) => {
 
     CKEDITOR.config.stylesSet = 'cricket_styles';
 
-    // CKEDITOR.config.removeButtons = 'Save,NewPage,Preview,Templates,ShowBlocks,Cut,Copy,Paste,PasteText,PasteFromWord,SelectAll,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Replace,Find,CopyFormatting,RemoveFormat,BidiLtr,BidiRtl,Language,CreateDiv,Flash,Image,Smiley,PageBreak,Iframe,About,TextColor,BGColor,FontSize,Font,Format';
     CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
     CKEDITOR.config.pasteFromWordRemoveStyles = true;
     CKEDITOR.config.pasteFromWordRemoveFontStyles = true;
@@ -226,69 +217,93 @@ define((require, exports, module) => {
 
     CKEDITOR.plugins.add('globalContent', {
         init(editor) {
-            const modalContent = 'modalContent';
+            const modalContentLabel = 'modalContent';
             const legalContent = 'legalContent';
             const modalSlot = 'modalSlot';
 
-            editor.addCommand(modalContent, {
+            editor.addCommand(modalContentLabel, {
                 exec(editor) {
-                    $('#insert').unbind('click');
-                    $('#globalContent').modal('show');
-                    $('#insert').on('click', (event) => {
-                        event.preventDefault();
-                        const modalTitle = $('#result h4#modalTitle').text();
-                        const modalID = $('#result span#modalID').text();
-                        editor.insertHtml(`<a href="modalAction/${modalID}" title="" pop-modal modalid="${modalID}" class="custom-class" data-toggle="modal" data-target="#${modalID}">${modalTitle}</a>`);
-                        $('#globalContent').modal('hide');
-                        $('#globalContent #result').empty();
-                        $('#searchTerm').val('');
-                    });
+                    $('#insert')
+                        .unbind('click');
+                    $('#globalContent')
+                        .modal('show');
+                    $('#insert')
+                        .on('click', (event) => {
+                            event.preventDefault();
+                            const modalTitle = $('#result h4#modalTitle')
+                                .text();
+                            const modalID = $('#result span#modalID')
+                                .text();
+                            editor.insertHtml(`<a href="modalAction/${modalID}" title="" pop-modal modalid="${modalID}" class="custom-class" data-toggle="modal" data-target="#${modalID}">${modalTitle}</a>`);
+                            $('#globalContent')
+                                .modal('hide');
+                            $('#globalContent #result')
+                                .empty();
+                            $('#searchTerm')
+                                .val('');
+                        });
                 },
                 canUndo: true
             });
 
             editor.addCommand(legalContent, {
                 exec(editor) {
-                    $('#legalInsert').unbind('click');
-                    $('#legalContent').modal('show');
-                    $('#legalInsert').on('click', (event) => {
-                        event.preventDefault();
-                        const legalID = $('#legalResult span#legalID').text();
-                        const descriptionType = $('#legalResult #descriptionType').val();
-                        if (descriptionType.length > 0 && descriptionType) {
-                            editor.insertText(`~#[content]-[legal]-[content]-[${legalID}]-[${descriptionType}]#~`);
-                        } else {
-                            $('#legalResult #descriptionTypeLabel').addClass('text-danger');
-                            return false;
-                        }
-                        $('#legalContent').modal('hide');
-                        $('#legalContent #legalResult').empty();
-                        $('#legalSearch').val('');
-                    });
+                    $('#legalInsert')
+                        .unbind('click');
+                    $('#legalContent')
+                        .modal('show');
+                    $('#legalInsert')
+                        .on('click', (event) => {
+                            event.preventDefault();
+                            const legalID = $('#legalResult span#legalID')
+                                .text();
+                            const descriptionType = $('#legalResult #descriptionType')
+                                .val();
+                            if (descriptionType.length > 0 && descriptionType) {
+                                editor.insertText(`~#[content]-[legal]-[content]-[${legalID}]-[${descriptionType}]#~`);
+                            } else {
+                                $('#legalResult #descriptionTypeLabel')
+                                    .addClass('text-danger');
+                                return false;
+                            }
+                            $('#legalContent')
+                                .modal('hide');
+                            $('#legalContent #legalResult')
+                                .empty();
+                            $('#legalSearch')
+                                .val('');
+                        });
                 },
                 canUndo: true
             });
 
             editor.addCommand(modalSlot, {
                 exec(editor) {
-                    $('#modalSlotInsert').off();
-                    $('#modalSlotContent').modal('show');
-                    $('#modalSlotInsert').on('click', () => {
-                        const modalTitle = $('#modalTitle').text();
-                        const modalBody = document.querySelector('#modalBody');
-                        const { slotId } = modalBody.dataset;
-                        const { slotDocId } = modalBody.dataset;
-                        const ref = modalBody.dataset.slotRef;
-                        const uuid = OneTeam.parseNodeIdFromRef(ref);
+                    $('#modalSlotInsert')
+                        .off();
+                    $('#modalSlotContent')
+                        .modal('show');
+                    $('#modalSlotInsert')
+                        .on('click', () => {
+                            const modalTitle = $('#modalTitle')
+                                .text();
+                            const modalBody = document.querySelector('#modalBody');
+                            const { slotId } = modalBody.dataset;
+                            const { slotDocId } = modalBody.dataset;
+                            const ref = modalBody.dataset.slotRef;
+                            const uuid = OneTeam.parseNodeIdFromRef(ref);
 
-                        const currentDocId = getCurrentDocId();
-                        editor.insertHtml(
-                            `<a href="modalAction/${slotId}" title="" pop-modal slotid="${slotId}" ` + `data-link-id="${uuid}" data-link-ref="${ref}" ` + `class="custom-class" data-toggle="modal" data-target="#${slotId}"> ${modalTitle}</a>`
-                        );
-                        $('#modalSlotContent').modal('hide');
-                        $('#modalSlotContent #modalSlotResult').empty();
-                        $('#searchTermModalSlot').val('');
-                    });
+                            const currentDocId = getCurrentDocId();
+                            editor.insertHtml(
+                                `<a href="modalAction/${slotId}" title="" pop-modal slotid="${slotId}" ` + `data-link-id="${uuid}" data-link-ref="${ref}" ` + `class="custom-class" data-toggle="modal" data-target="#${slotId}"> ${modalTitle}</a>`
+                            );
+                            $('#modalSlotContent')
+                                .modal('hide');
+                            $('#modalSlotContent #modalSlotResult')
+                                .empty();
+                            $('#searchTermModalSlot')
+                                .val('');
+                        });
                 },
                 canUndo: true
             });
@@ -310,96 +325,41 @@ define((require, exports, module) => {
                 command: modalSlot,
                 toolbar: 'modalSlot,1'
             });
-        }
-    });
 
-    CKEDITOR.config.extraPlugins = 'globalContent,dialog';
+            // Listen for the "pluginsLoaded" event, so we are sure that the
+            // "dialog" plugin has been loaded and we are able to do our
+            // customizations.
+            editor.on('pluginsLoaded', () => {
+                // If our custom dialog has not been registered, do that now.
+                if ($('#globalContent').length === 0) {
+                    $('body')
+                        .append(modalHtml);
+                    $('body')
+                        .append(legalHtml);
 
-    CKEDITOR.on('instanceCreated', (ev) => {
-        const { editor } = ev;
-        const editorId = editor.id;
-        let currentScore = 0.0;
-
-        // get initial score
-        if (editor.getData()) {
-            currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
-        }
-
-        // append score indicator when editor finished initializing
-        editor.on('instanceReady', () => {
-            $(`#${editorId}_bottom`).append(`<p style="display: inline-block;
-                                                    float: right;
-                                                    padding: 6px 6px 0;
-                                                    color: #60676a;
-                                                    cursor: default;
-                                                    text-decoration: none;
-                                                    outline: 0;
-                                                    border: 0;">Current Flesch Kincaid score: <span id="${editorId}_curScore">${currentScore}</span></p>`);
-        });
-
-        // Listen for the "pluginsLoaded" event, so we are sure that the
-        // "dialog" plugin has been loaded and we are able to do our
-        // customizations.
-        editor.on('pluginsLoaded', () => {
-            // If our custom dialog has not been registered, do that now.
-            if ($('#globalContent').length === 0) {
-                $('body').append(modalHtml);
-                $('body').append(legalHtml);
-
-                $(`<style>${modalCSS}</style>`).appendTo('#globalContent');
-                $('select.workspace-picker').on('change', initAutoComplete);
-                initAutoComplete();
-            }
-
-            if ($('#modalSlotContent').length === 0) {
-                $('body').append(modalSlotHtml);
-                initModalSlotAutoComplete();
-            }
-        });
-
-        // get current document information
-        const document = Ratchet.observable('document');
-
-        document.subscribe(editorId, () => {
-
-            const node = document.get();
-
-            if (!node.hasOwnProperty('_score')) {
-                node._score = {};
-            }
-
-            // compare current editor text to the document text to determine which property this editor is on
-            for (const [key, value] of Object.entries(node)) {
-                if (editor.getData() === value) {
-                    const propertyName = `${key}_score`;
-                    node._score[propertyName] = currentScore;
+                    $(`<style>${modalCSS}</style>`)
+                        .appendTo('#globalContent');
+                    $('select.workspace-picker')
+                        .on('change', initAutoComplete);
+                    initAutoComplete();
                 }
-            }
 
-            if (currentScore) {
-                node.update().then(() => {
-                    document.unsubscribe(editorId);
-                });
-            }
-        });
+                if ($('#modalSlotContent').length === 0) {
+                    $('body')
+                        .append(modalSlotHtml);
+                    initModalSlotAutoComplete();
+                }
+            });
 
-        editor.on('change', () => {
-            const str = editor.getData();
-            if (str) {
-                currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
-            } else {
-                currentScore = 0.0;
-            }
-
-            // updating current score on the indicator
-            $(`#${editorId}_curScore`).html(currentScore);
-        });
-
+        }
     });
+
+    CKEDITOR.config.extraPlugins = 'globalContent,dialog,divarea';
 
     function initAutoComplete() {
         // Check workspace-picker to determine the appropriate env for creating the preview link.
-        const workspacePickerVal = $('select.workspace-picker option:selected').text();
+        const workspacePickerVal = $('select.workspace-picker option:selected')
+            .text();
         let domain;
         // Decide on the correct environment
         if (workspacePickerVal.includes('Master')) {
@@ -408,27 +368,12 @@ define((require, exports, module) => {
         } else if (workspacePickerVal.includes('SIT1')) {
             // console.log("SIT1");
             domain = 'https://wwwsit1.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT2')) {
-            // console.log("SIT2");
-            domain = 'https://wwwsit2.cricketwireless.com';
         } else if (workspacePickerVal.includes('SIT3')) {
             // console.log("SIT3");
             domain = 'https://wwwsit3.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT6')) {
-            // console.log("SIT6");
-            domain = 'https://wwwsit6.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT4')) {
-            // console.log("SIT4");
-            domain = 'https://wwwsit4.cricketwireless.com';
         } else if (workspacePickerVal.includes('SIT5')) {
             // console.log("SIT8");
             domain = 'https://wwwsit5.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT8')) {
-            // console.log("SIT8");
-            domain = 'https://wwwsit8.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT9')) {
-            // console.log("SIT9");
-            domain = 'https://wwwsit9.cricketwireless.com';
         } else {
             console.log('Nothing found');
         }
@@ -437,7 +382,7 @@ define((require, exports, module) => {
         // EVENTUALLY NEED TO SEARCH ONDEMAND, WILL NEED TO MODIFY THE MIDDLEWARE
         $.get(`${domain}/cloudassets/cms/modal/content`, (result) => {
             const newObject = [];
-            $.each(result, function (data) {
+            $.each(result, function(data) {
                 // console.log(data);
                 const dataObj = {
                     value: this.title,
@@ -457,7 +402,7 @@ define((require, exports, module) => {
         // LOAD LEGAL CONTENT
         $.get(`${domain}/cloudassets/cms/legal/content`, (result) => {
             const newObject = [];
-            $.each(result, function (data) {
+            $.each(result, function(data) {
                 const dataObj = {
                     value: this.topic,
                     data: {
@@ -480,7 +425,8 @@ define((require, exports, module) => {
         let previewContent;
         let modalSlotSuggestion;
         // fetch all cricket:slot with slotIsModal of "y", active, w a slotId and at least 1 slotContent item
-        const branch = Ratchet.observable('branch').get();
+        const branch = Ratchet.observable('branch')
+            .get();
         Chain(branch)
             .trap(genericErrorLoggerHalter)
             .queryNodes({
@@ -501,23 +447,24 @@ define((require, exports, module) => {
                 modalSlotContent.push(modalSlotSuggestion);
             })
             .then(() => {
-                $('#searchTermModalSlot').autocomplete({
-                    lookup: modalSlotContent,
-                    onSelect(suggestion) {
-                        previewContent = flattenSlotContentMarkupRecursively({
-                            node: suggestion,
-                            nodeIsRoot: true
-                        });
-                        $('#modalSlotResult')
-                            .empty()
-                            .html(
-                                `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" `
-                                + `data-slot-id="${suggestion.slotId}" `
-                                + `data-slot-doc-id="${suggestion.slotDocId}" `
-                                + `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
-                            );
-                    }
-                });
+                $('#searchTermModalSlot')
+                    .autocomplete({
+                        lookup: modalSlotContent,
+                        onSelect(suggestion) {
+                            previewContent = flattenSlotContentMarkupRecursively({
+                                node: suggestion,
+                                nodeIsRoot: true
+                            });
+                            $('#modalSlotResult')
+                                .empty()
+                                .html(
+                                    `<h4 id="modalTitle">${suggestion.value}</h4><div id="modalBody" `
+                                    + `data-slot-id="${suggestion.slotId}" `
+                                    + `data-slot-doc-id="${suggestion.slotDocId}" `
+                                    + `data-slot-ref="${suggestion.slotRef}">${previewContent}</div>`
+                                );
+                        }
+                    });
             });
     }
 
@@ -568,40 +515,42 @@ define((require, exports, module) => {
     }
 
     function searchInit() {
-        $('#searchTerm').autocomplete({
-            lookup: modalContent,
-            onSelect(suggestion) {
-                $('#result')
-                    .empty()
-                    .html(`<h4 id="modalTitle">${suggestion.value}</h4><p id="modalBody">${suggestion.data.modalBody}</p><p><span id="modalID">${suggestion.data.ID}</span></p>`);
-            }
-        });
+        $('#searchTerm')
+            .autocomplete({
+                lookup: modalContent,
+                onSelect(suggestion) {
+                    $('#result')
+                        .empty()
+                        .html(`<h4 id="modalTitle">${suggestion.value}</h4><p id="modalBody">${suggestion.data.modalBody}</p><p><span id="modalID">${suggestion.data.ID}</span></p>`);
+                }
+            });
     }
 
     function legalInit() {
-        $('#legalSearch').autocomplete({
-            lookup: legalContent,
-            onSelect(suggestion) {
-                if (suggestion.data.longDisclaimer && suggestion.data.shortDisclaimer) {
-                    $('#legalResult')
-                        .empty()
-                        .html(
-                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="">Insert Short or Long Description</option><option value="shortDisclaimer">Short</option><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                        );
-                } else if (suggestion.data.longDisclaimer) {
-                    $('#legalResult')
-                        .empty()
-                        .html(
-                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                        );
-                } else {
-                    $('#legalResult')
-                        .empty()
-                        .html(
-                            `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="shortDisclaimer">Short</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
-                        );
+        $('#legalSearch')
+            .autocomplete({
+                lookup: legalContent,
+                onSelect(suggestion) {
+                    if (suggestion.data.longDisclaimer && suggestion.data.shortDisclaimer) {
+                        $('#legalResult')
+                            .empty()
+                            .html(
+                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="">Insert Short or Long Description</option><option value="shortDisclaimer">Short</option><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                            );
+                    } else if (suggestion.data.longDisclaimer) {
+                        $('#legalResult')
+                            .empty()
+                            .html(
+                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="longDisclaimer">Long</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="longDisclaimer"><b>Long Disclaimer:</b><br>${suggestion.data.longDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                            );
+                    } else {
+                        $('#legalResult')
+                            .empty()
+                            .html(
+                                `<p id="descriptionTypeLabel">Please select description type</p><select class="form-control" id="descriptionType"><option value="shortDisclaimer">Short</option></select><br><h4 id="legalTitle">${suggestion.data.title}</h4><p id="shortDisclaimer"><b>Short Disclaimer:</b><br>${suggestion.data.shortDisclaimer}</p><p><span id="legalID">${suggestion.data.ID}</span></p>`
+                            );
+                    }
                 }
-            }
-        });
+            });
     }
 });
