@@ -10,7 +10,6 @@ define((require, exports, module) => {
     uri = uri.substring(0, uri.lastIndexOf('/'));
 
     require('https://cache.cricketwireless.com/ckeditor-plugins/jquery.autocomplete.min.js');
-    require('https://cache.cricketwireless.com/ckeditor-plugins/flesch-kincaid.js');
 
     const basePluginPath = '../../..'; // necessary to offset from Cloud CMS plugin location
     const paragraphModalAssociationType = 'paragraph:has-modal';
@@ -24,10 +23,6 @@ define((require, exports, module) => {
         console.error(err);
         return false;
     }
-
-    // basePluginPath += uri.replace(window.location.origin, '');
-    // CKEDITOR.plugins.addExternal('balloonpanel', `${basePluginPath}/plugins/balloonpanel/`);
-    // CKEDITOR.plugins.addExternal('a11ychecker', `${basePluginPath}/plugins/a11ychecker/`);
 
     CKEDITOR.config.skin = 'kama';
     CKEDITOR.config.customConfig = '';
@@ -316,27 +311,7 @@ define((require, exports, module) => {
     CKEDITOR.config.extraPlugins = 'globalContent,dialog';
 
     CKEDITOR.on('instanceCreated', (ev) => {
-        const { editor } = ev;
-        const editorId = editor.id;
-        let currentScore = 0.0;
-
-        // get initial score
-        if (editor.getData()) {
-            currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(editor.getData());
-        }
-
-        // append score indicator when editor finished initializing
-        editor.on('instanceReady', () => {
-            $(`#${editorId}_bottom`).append(`<p style="display: inline-block;
-                                                    float: right;
-                                                    padding: 6px 6px 0;
-                                                    color: #60676a;
-                                                    cursor: default;
-                                                    text-decoration: none;
-                                                    outline: 0;
-                                                    border: 0;">Current Flesch Kincaid score: <span id="${editorId}_curScore">${currentScore}</span></p>`);
-        });
-
+    
         // Listen for the "pluginsLoaded" event, so we are sure that the
         // "dialog" plugin has been loaded and we are able to do our
         // customizations.
@@ -357,44 +332,6 @@ define((require, exports, module) => {
             }
         });
 
-        // get current document information
-        const document = Ratchet.observable('document');
-
-        document.subscribe(editorId, () => {
-
-            const node = document.get();
-
-            if (!node.hasOwnProperty('_score')) {
-                node._score = {};
-            }
-
-            // compare current editor text to the document text to determine which property this editor is on
-            for (const [key, value] of Object.entries(node)) {
-                if (editor.getData() === value) {
-                    const propertyName = `${key}_score`;
-                    node._score[propertyName] = currentScore;
-                }
-            }
-
-            if (currentScore) {
-                node.update().then(() => {
-                    document.unsubscribe(editorId);
-                });
-            }
-        });
-
-        editor.on('change', () => {
-            const str = editor.getData();
-            if (str) {
-                currentScore = TextStatistics.prototype.fleschKincaidGradeLevel(str);
-            } else {
-                currentScore = 0.0;
-            }
-
-            // updating current score on the indicator
-            $(`#${editorId}_curScore`).html(currentScore);
-        });
-
     });
 
     function initAutoComplete() {
@@ -408,27 +345,12 @@ define((require, exports, module) => {
         } else if (workspacePickerVal.includes('SIT1')) {
             // console.log("SIT1");
             domain = 'https://wwwsit1.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT2')) {
-            // console.log("SIT2");
-            domain = 'https://wwwsit2.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT3')) {
+        }  else if (workspacePickerVal.includes('SIT3')) {
             // console.log("SIT3");
             domain = 'https://wwwsit3.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT6')) {
-            // console.log("SIT6");
-            domain = 'https://wwwsit6.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT4')) {
-            // console.log("SIT4");
-            domain = 'https://wwwsit4.cricketwireless.com';
         } else if (workspacePickerVal.includes('SIT5')) {
-            // console.log("SIT8");
+            // console.log("SIT6");
             domain = 'https://wwwsit5.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT8')) {
-            // console.log("SIT8");
-            domain = 'https://wwwsit8.cricketwireless.com';
-        } else if (workspacePickerVal.includes('SIT9')) {
-            // console.log("SIT9");
-            domain = 'https://wwwsit9.cricketwireless.com';
         } else {
             console.log('Nothing found');
         }
