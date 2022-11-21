@@ -308,7 +308,7 @@ define((require, exports, module) => {
 
             editor.ui.addButton('modalContent', {
                 label: 'Modal',
-                command: modalContent,
+                command: modalContentLabel,
                 toolbar: 'modalContent,1'
             });
 
