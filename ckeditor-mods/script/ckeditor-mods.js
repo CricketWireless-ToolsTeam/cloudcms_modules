@@ -10,7 +10,8 @@ define((require, exports, module) => {
     uri = uri.substring(0, uri.lastIndexOf('/'));
 
     require('https://cache.cricketwireless.com/ckeditor-plugins/jquery.autocomplete.min.js');
-
+    require('https://cache.cricketwireless.com/ckeditor-plugins/flesch-kincaid.js');
+    
     const basePluginPath = '../../..'; // necessary to offset from Cloud CMS plugin location
     const paragraphModalAssociationType = 'paragraph:has-modal';
 
@@ -329,6 +330,10 @@ define((require, exports, module) => {
             if ($('#modalSlotContent').length === 0) {
                 $('body').append(modalSlotHtml);
                 initModalSlotAutoComplete();
+            }
+            
+            else {
+                console.log('No plugin loaded')
             }
         });
 
