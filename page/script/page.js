@@ -10,7 +10,7 @@ define((require, exports, module) => {
     const errorColor = '#a94442';
     const validColor = 'rgb(39, 174, 96)';
     const saveButtonSelector = '.buttonbar .btn.save, .btn-toolbar .btn.save, .btn.btn-success.wizard-next';
-    const propertyFieldSelector = '.alpaca-field [data-alpaca-field-name=urlList], .alpaca-field [data-alpaca-field-name=errorCode], .alpaca-field [data-alpaca-field-name=skuId] .alpaca-field [name=pagePath]';
+    const propertyFieldSelector = '.alpaca-field [data-alpaca-field-name=urlList], .alpaca-field [data-alpaca-field-name=errorCode], .alpaca-field [data-alpaca-field-name=skuId] .alpaca-field [data-alpaca-field-name=pagePath]';
     const propertyTextSelector = '.alpaca-field [name=urlList_0_url], .alpaca-field [name=errorCode], .alpaca-field [name=skuId] .alpaca-field [name=pagePath]';
     const helpBlockSelector = '.help-block';
     const validPropertyClass = 'valid-property-message';
