@@ -31,5 +31,8 @@
     "dependencies": {
         "gitana": "^1.0.305",
         "jquery": "^3.4.1"
+    },
+    "volta": {
+        "node": "22.15.0"
     }
 }

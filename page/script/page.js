@@ -31,7 +31,8 @@ define((require, exports, module) => {
     const propertiesList = [
         { regex: 'cricket:page(-.*)?', property: 'urlList.0.url' },
         { regex: 'cricket:error', property: 'errorCode' },
-        { regex: 'cricket:sku', property: 'skuId' }
+        { regex: 'cricket:sku', property: 'skuId' },
+        { regex: 'products:list-pages-filtered', property: 'pagePath' }
     ];
 
     function enableSave() {
