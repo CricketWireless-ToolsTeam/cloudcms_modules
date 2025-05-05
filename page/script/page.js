@@ -9,7 +9,7 @@ define((require, exports, module) => {
     const validPropertyString = 'The value is not being used elsewhere, you are good to go.';
     const errorColor = '#a94442';
     const validColor = 'rgb(39, 174, 96)';
-    const saveButtonSelector = '.buttonbar .btn.save, .btn-toolbar .btn.save, .btn.btn-success.wizard-next';
+    const saveButtonSelector = '.buttonbar .btn.save, .btn-toolbar .btn.save, .btn.btn-success.wizard-next, .navbar-btn.btn.btn-primary.save';
     const propertyFieldSelector = '.alpaca-field [data-alpaca-field-name=urlList], .alpaca-field [data-alpaca-field-name=errorCode], .alpaca-field [data-alpaca-field-name=skuId], .alpaca-field [data-alpaca-field-name=pagePath]';
     const propertyTextSelector = '.alpaca-field [name=urlList_0_url], .alpaca-field [name=errorCode], .alpaca-field [name=skuId], .alpaca-field [name=pagePath]';
     const helpBlockSelector = '.help-block';
