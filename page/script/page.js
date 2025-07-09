@@ -86,7 +86,7 @@ define((require, exports, module) => {
 
     function setPropertyInvalid() {
         isValid = false;
-        disableSave();
+        // disableSave();
         // preemptively remove to prevent occasional double insertion
         clearMessages();
         // add message text
@@ -148,7 +148,7 @@ define((require, exports, module) => {
             let value;
 
             // disable early as response timing varies
-            disableSave();
+            // disableSave();
             clearMessages();
 
             // cancel previous request if new event comes in before it completes
